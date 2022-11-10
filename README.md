@@ -1,6 +1,6 @@
 ## Ezzyforms
 
-A form application crated with Next.js and Tailwind CSS
+A form application created with Next.js and Tailwind CSS
 
 ## Getting Started
 
