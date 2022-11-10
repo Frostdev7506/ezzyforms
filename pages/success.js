@@ -2,9 +2,21 @@
 import { useRouter } from "next/router";
 import { motion as m } from "framer-motion";
 import ReactConfetti from "react-confetti";
+import { useEffect, useState } from "react";
 
 export default function success() {
   const router = useRouter();
+  const [pieces, setPieces] = useState(200);
+
+  const stopConfetti = () => {
+    setTimeout(() => {
+      setPieces(0);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    stopConfetti();
+  }, []);
 
   return (
     <m.main
@@ -22,7 +34,7 @@ export default function success() {
           you as soon as we can!
         </p>
       </div>
-      <ReactConfetti />
+      <ReactConfetti gravity={0.2} numberOfPieces={pieces} />
     </m.main>
   );
 }
