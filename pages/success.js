@@ -1,11 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRouter } from "next/router";
+import { motion as m } from "framer-motion";
 
 export default function success() {
   const router = useRouter();
 
   return (
-    <main className="h-screen flex items-center justify-center">
+    <m.main
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="h-screen flex items-center justify-center"
+    >
       <div className="bg-white  rounded-lg w-1/2 font-latoRegular p-16 text-gray-700">
         <h1 className="text-3xl pb-4 fot-latoBold">
           Thanks for submitting the form 🌟{router.query.name}
@@ -15,6 +21,6 @@ export default function success() {
           you as soon as we can!
         </p>
       </div>
-    </main>
+    </m.main>
   );
 }
