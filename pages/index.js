@@ -1,9 +1,45 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useFormik } from "formik";
 import formImage from "../public/form.png";
 import styles from "../styles/Home.module.css";
+import * as yup from "yup";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  //router logic
+  const router = useRouter();
+
+  //formik logic
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      country: "United States",
+      terms: "",
+    },
+
+    //validate the form
+
+    validationSchema: yup.object({
+      name: yup
+        .string()
+        .max(20, "Name must be  20 charaters or less ")
+        .required("The name is requried "),
+      email: yup
+        .string()
+        .email("Invallid Email Address ")
+        .required("The email is requried "),
+      terms: yup.array().required("The terms of service must be checked "),
+    }),
+
+    //Submit form
+    onSubmit: (values) => {
+      console.log(values);
+      router.push({ pathname: "/success", query: values });
+    },
+  });
+
   return (
     <div>
       <Head>
@@ -13,7 +49,10 @@ export default function Home() {
       </Head>
 
       <main className="h-screen flex items-center justify-center">
-        <form className="bg-white flex rounded-lg w-1/2 font-latoRegular">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="bg-white flex rounded-lg w-1/2 font-latoRegular"
+        >
           {/* form div */}
           <div className="flex-1 text-gray-700 p-20">
             <h1 className=" text-3xl pb-2 font-latoBold ">Hi there ! 😉</h1>
@@ -26,14 +65,23 @@ export default function Home() {
               {/* Name input field */}
               <div className="pb-4">
                 <label
-                  className="block font-latoBold text-sm pb-2"
+                  className={`block font-latoBold text-sm pb-2 ${
+                    formik.touched.name && formik.errors.name
+                      ? "text-red-500"
+                      : ""
+                  }`}
                   htmlFor="name"
                 >
-                  Name
+                  {formik.touched.name && formik.errors.name
+                    ? formik.errors.name
+                    : "Name"}
                 </label>
                 <input
                   type="text"
                   name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="border-2 border-gray-500 p-2 rounded-md w-1/2 focus:border-teal-700 focus:ring-teal-700"
                   autoComplete="off"
                   placeholder="Enter Your Name"
@@ -42,14 +90,23 @@ export default function Home() {
               {/*  Email field */}
               <div className="pb-4">
                 <label
-                  className="block font-latoBold text-sm pb-2"
+                  className={`block font-latoBold text-sm pb-2 ${
+                    formik.touched.email && formik.errors.email
+                      ? "text-red-500"
+                      : ""
+                  }`}
                   htmlFor="email"
                 >
-                  Email
+                  {formik.touched.email && formik.errors.email
+                    ? formik.errors.email
+                    : "Email"}
                 </label>
                 <input
                   type="email"
                   name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="border-2 border-gray-500 p-2 rounded-md w-1/2 focus:border-teal-700 focus:ring-teal-700"
                   autoComplete="off"
                   placeholder="Enter Your Email"
@@ -62,10 +119,12 @@ export default function Home() {
                   className="block font-latoBold text-sm pb-2"
                   htmlFor="country"
                 >
-                  Email
+                  Country
                 </label>
                 <select
                   name="country"
+                  value={formik.values.country}
+                  onChange={formik.handleChange}
                   className="border-2
                   border-gray-500 p-2 rounded-md w-1/2 focus:border-teal-700
                   focus:ring-teal-700"
@@ -88,14 +147,22 @@ export default function Home() {
               {/* Terms of Service */}
               <div className="pb-4">
                 <label
-                  className="block font-latoBold text-sm pb-2"
+                  className={`block font-latoBold text-sm pb-2 ${
+                    formik.touched.terms && formik.errors.terms
+                      ? "text-red-500"
+                      : ""
+                  }`}
                   htmlFor="terms"
                 >
-                  Terms Of Service
+                  {formik.touched.terms && formik.errors.terms
+                    ? formik.errors.terms
+                    : "Terms of Service"}
                 </label>
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     name="terms"
                     value="checked"
                     className="w-5 h-5 text-teal-700 border-2 focus:border-teal-700
@@ -116,7 +183,12 @@ export default function Home() {
             </div>
           </div>
           <div className=" relative flex-1 ">
-            <Image src={formImage} fill className="object-cover rounded-lg" />
+            <Image
+              alt="Login-form-image"
+              src={formImage}
+              fill
+              className="object-cover rounded-lg"
+            />
           </div>
         </form>
       </main>
