@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRouter } from "next/router";
 import { motion as m } from "framer-motion";
+import ReactConfetti from "react-confetti";
 
 export default function success() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function success() {
           you as soon as we can!
         </p>
       </div>
+      <ReactConfetti />
     </m.main>
   );
 }
